@@ -1,5 +1,6 @@
 from application import utils
-import time
+from application import urls
+
 
 def parse_request(request_data, ip_port):
     request_text =  request_data.decode()
@@ -22,8 +23,12 @@ def application(current_dir, request_data, ip_port):
     response_data = ""
     #dynamic
     if file_path.endswith(".py"):
-        response_body = f"This is Index Dynamic {time.ctime()}".encode()
-        response_data = utils.create_http_response("200 OK", response_body)
+        if file_path in urls.route_dict:
+            response_body = urls.route_dict[file_path]().encode()
+            response_data = utils.create_http_response("200 OK", response_body)
+        else:
+            response_body = "This page Not Found!".encode()
+            response_data = utils.create_http_response("404 Not Found", response_body)
     else:
         #static
         try:
