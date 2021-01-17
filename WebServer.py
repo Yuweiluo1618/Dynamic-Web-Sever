@@ -1,5 +1,6 @@
 import socket
 from application import app
+import multiprocessing
 
 class WebServer(object):
     def __init__(self):
@@ -14,7 +15,12 @@ class WebServer(object):
         while True:
             new_client_socket, ip_port = self.tcp_server_socket.accept()
             print(f"new client has connected:{str(ip_port)}")
-            self.request_handler(new_client_socket, ip_port)
+            p1 = multiprocessing.Process(target=self.request_handler, args=(new_client_socket, ip_port))
+            p1.daemon =True
+
+            p1.start()
+            new_client_socket.close()
+
 
 
 
