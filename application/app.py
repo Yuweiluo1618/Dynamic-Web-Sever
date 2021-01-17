@@ -1,7 +1,8 @@
 from application import utils
 from application import urls
+from application import funs
 
-
+print(urls.route_dict)
 def parse_request(request_data, ip_port):
     request_text =  request_data.decode()
     loc = request_text.find("\r\n")
